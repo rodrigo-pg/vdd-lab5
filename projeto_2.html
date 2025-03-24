@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>ECharts</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+  </head>
+  <body>
+    <!-- Filtro -->
+    <label for="filter">Filtrar por:</label>
+    <select id="filter">
+      <option value="all">Todos</option>
+      <option value="positive">Somente Positivos</option>
+      <option value="negative">Somente Negativos</option>
+    </select>
+
+    <!-- Gráfico -->
+    <div id="main" style="width: 100vw; height:100vh;"></div>
+
+    <script type="text/javascript">
+      var myChart = echarts.init(document.getElementById('main'));
+
+      const labelRight = { position: 'right' };
+
+      // Dados originais
+      const years = ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'];
+      const rawData = [
+        124.6, { value: -17.9, label: labelRight, itemStyle: { color: "red"} },
+        { value: -91.7, label: labelRight, itemStyle: { color: "red"} },
+        { value: -83.5, label: labelRight, itemStyle: { color: "red"} },
+        553.3, { value: -266.9, label: labelRight, itemStyle: { color: "red"} },
+        93.4, { value: -202.8, label: labelRight, itemStyle: { color: "red"} },
+        550.1, { value: -562, label: labelRight, itemStyle: { color: "red"} },
+      ];
+
+      function updateChart(filter) {
+        let filteredYears = [];
+        let filteredData = [];
+
+        rawData.forEach((item, index) => {
+          let value = typeof item === "object" ? item.value : item;
+          if (
+            filter === "all" ||
+            (filter === "positive" && value >= 0) ||
+            (filter === "negative" && value < 0)
+          ) {
+            filteredYears.push(years[index]);
+            filteredData.push(item);
+          }
+        });
+
+        let option = {
+          title: { text: 'Variação da chuva acumulada por ano' },
+          tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+          grid: { top: 80, bottom: 30 },
+          xAxis: { type: 'value', position: 'top', splitLine: { lineStyle: { type: 'dashed' } } },
+          yAxis: { type: 'category', data: filteredYears },
+          series: [
+            {
+              name: 'Diferença ano anterior (mm)',
+              type: 'bar',
+              stack: 'Total',
+              label: { show: true, formatter: '{b}' },
+              data: filteredData
+            }
+          ],
+          dataZoom: [
+        {
+          show: true,
+          start: 0,
+          end: 100
+        },
+        {
+          type: 'inside',
+          start: 0,
+          end: 100
+        },
+        {
+          show: true,
+          yAxisIndex: 0,
+          filterMode: 'empty',
+          width: 30,
+          height: '100%',
+          showDataShadow: false,
+          left: '93%'
+        }
+      ],
+        };
+
+        myChart.setOption(option);
+      }
+
+      // Inicializar gráfico
+      updateChart("all");
+
+      // Adicionar evento ao select
+      document.getElementById("filter").addEventListener("change", function () {
+        updateChart(this.value);
+      });
+    </script>
+  </body>
+</html>

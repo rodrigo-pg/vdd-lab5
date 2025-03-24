@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>ECharts</title>
+    <!-- Include the ECharts file you just downloaded -->
+    <script src="echarts.js"></script>
+  </head>
+  <body>
+    <!-- Prepare a DOM with a defined width and height for ECharts -->
+    <div id="main" style="width: 100vw; height:100vh;"></div>
+    <script type="text/javascript">
+      // Initialize the echarts instance based on the prepared dom
+      var myChart = echarts.init(document.getElementById('main'));
+
+      // Specify the configuration items and data for the chart
+      var option = {
+        title: {
+          text: 'Pluviosidade (mm) por ano na fazenda Carnaúba (2013 a 2023)'
+        },
+        tooltip: {},
+        legend: {
+          data: ['Pluviosidade (mm)']
+        },
+        xAxis: {
+          data: ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023']
+        },
+        yAxis: {},
+        series: [
+          {
+            name: 'Pluviosidade (mm)',
+            type: 'bar',
+            data: [404.6, 295.0, 386.7, 211.5, 764.8, 497.9, 591.3, 388.5, 938.6, 376.6]
+          }
+        ],
+        dataZoom: [
+        {
+          show: true,
+          start: 0,
+          end: 100
+        },
+        {
+          type: 'inside',
+          start: 0,
+          end: 100
+        },
+        {
+          show: true,
+          yAxisIndex: 0,
+          filterMode: 'empty',
+          width: 30,
+          height: '80%',
+          showDataShadow: false,
+          left: '93%'
+        }
+      ],
+      };
+
+      // Display the chart using the configuration items and data just specified.
+      myChart.setOption(option);
+    </script>
+  </body>
+</html>
